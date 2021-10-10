@@ -38,12 +38,10 @@ body {
 body.is-Loaded {
     visibility: visible;
     opacity: 1;
-    font-size: 16px;
 }
 
 div[data-block-select] {
     opacity: 0;
-    transition: opacity .1s ease-in-out;
 }
 
 div[data-block-select].is-Loaded {

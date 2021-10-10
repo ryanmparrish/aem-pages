@@ -139,7 +139,7 @@ function loadBlocks(blocks) {
     };
 
     /**
-     * Unlazy each type of block
+     * Load each element
      * @param {HTMLElement} element
      */
     async function loadElement(element) {
@@ -215,7 +215,7 @@ function loadBlocks(blocks) {
 }
 
 function postLCP(blocks) {
-    document.body.classList.add('is-Loaded');
+    loadStyle('/fonts/fonts.css');
 };
 
 function setLCPTrigger(blocks) {
