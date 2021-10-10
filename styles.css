@@ -24,6 +24,7 @@
 
 :root {
     /* Typography */
+    font-family: 'adobe-clean', 'Trebuchet MS', sans-serif;
     --type-detail-all-weight: 700;
     --type-detail-m-size: 12px;
     --type-detail-m-lh: 15px;
@@ -54,13 +55,14 @@
 }
 
 body {
-    font-family: 'adobe-clean', 'Trebuchet MS', sans-serif;
+    font-family: 'Trebuchet MS', sans-serif;
     margin: 0;
     padding-top: 64px;
     font-size: 14px;
 }
 
 body.is-Loaded {
+    font-family: 'adobe-clean', 'Trebuchet MS', sans-serif;
     font-size: 16px;
 }
 
