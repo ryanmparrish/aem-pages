@@ -155,6 +155,7 @@ function loadBlocks(blocks) {
         } else {
             block.loaded = true;
         }
+        element.classList.add('is-Loaded');
     };
 
     /**
