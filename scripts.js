@@ -11,6 +11,7 @@ const config = {
         '.marquee': {
             location: '/blocks/marquee/',
             scripts: 'marquee.js',
+            styles: 'marquee.css',
         },
         'a[href^="https://www.youtube.com"]': {
             lazy: true,
@@ -215,7 +216,7 @@ function loadBlocks(blocks) {
 }
 
 function postLCP(blocks) {
-    loadStyle('/fonts/fonts.css');
+    loadBlocks(blocks);
 };
 
 function setLCPTrigger(blocks) {
@@ -232,5 +233,4 @@ function setLCPTrigger(blocks) {
 setDomain(document);
 loadTemplate(config);
 const blocks = decorateBlocks(document);
-loadBlocks(blocks);
 setLCPTrigger(blocks);
