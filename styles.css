@@ -43,7 +43,6 @@ body.is-Loaded {
 
 div[data-block-select] {
     opacity: 0;
-    transition: opacity .2s ease-in-out;
 }
 
 div[data-block-select].is-Loaded {
