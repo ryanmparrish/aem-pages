@@ -216,7 +216,6 @@ function loadBlocks(blocks) {
 }
 
 function postLCP() {
-    loadStyle('/fonts/fonts.css');
 };
 
 function setLCPTrigger() {
