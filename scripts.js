@@ -229,13 +229,11 @@ function setLCPTrigger() {
         postLCP(blocks);
     }
 }
+document.fonts.ready.then(() => {
+    document.body.classList.add('with-Fonts');
+});
 setDomain(document);
 loadTemplate(config);
 const blocks = decorateBlocks(document);
 loadBlocks(blocks);
 setLCPTrigger();
-
-document.fonts.ready.then(() => {
-    console.log('fonts ready');
-    document.body.classList.add('with-Fonts');
-});
