@@ -1,5 +1,30 @@
+@font-face {
+    font-family:"adobe-clean";
+    src:url("/fonts/adobe-clean-400.woff2") format("woff2");
+    font-display:optional;font-style:normal;font-weight:400;
+}
+
+@font-face {
+    font-family:"adobe-clean";
+    src:url("/fonts/adobe-clean-400-italic.woff2") format("woff2");
+    font-display:optional;font-style:italic;font-weight:400;
+}
+
+@font-face {
+    font-family:"adobe-clean";
+    src:url("/fonts/adobe-clean-700.woff2") format("woff2");
+    font-display:optional;font-style:normal;font-weight:700;
+}
+
+@font-face {
+    font-family:"adobe-clean";
+    src:url("/fonts/adobe-clean-900.woff2") format("woff2");
+    font-display:optional;font-style:normal;font-weight:900;
+}
+
 :root {
     /* Typography */
+    font-family: 'adobe-clean', 'Trebuchet MS', sans-serif;
     --type-detail-all-weight: 700;
     --type-detail-m-size: 12px;
     --type-detail-m-lh: 15px;
@@ -30,7 +55,6 @@
 }
 
 body {
-    font-family: 'adobe-clean', 'Trebuchet MS', sans-serif;
     margin: 0;
     padding-top: 64px;
 }

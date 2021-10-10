@@ -215,9 +215,7 @@ function loadBlocks(blocks) {
     });
 }
 
-function postLCP() {
-    loadStyle('/fonts/fonts.css');
-};
+function postLCP() {};
 
 function setLCPTrigger() {
     const lcpCandidate = document.querySelector('img');
@@ -235,7 +233,3 @@ loadTemplate(config);
 const blocks = decorateBlocks(document);
 loadBlocks(blocks);
 setLCPTrigger();
-
-document.fonts.ready.then(() => {
-    document.body.classList.add('is-Loaded');
-});
