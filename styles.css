@@ -25,6 +25,7 @@
 :root {
     /* Typography */
     font-family: 'adobe-clean', 'Trebuchet MS', sans-serif;
+    font-size: 14px;
     --type-detail-all-weight: 700;
     --type-detail-m-size: 12px;
     --type-detail-m-lh: 15px;
