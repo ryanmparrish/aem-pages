@@ -130,18 +130,14 @@ function decorateBlocks(element) {
 function loadBlocks(blocks) {
     async function initJs(element, block) {
         // If the block scripts haven't been loaded, load them.
-        if (block.scripts) {
-            if (!block.module) {
-                // eslint-disable-next-line no-param-reassign
-                block.module = await import(`${block.location}${block.scripts}`);
-            }
-            // If this block type has scripts and they're already imported
-            if (block.module) {
-                block.module.default(element);
-            }
+        if (!block.scripts) return;
+        if (!block.module) {
+            block.module = await import(`${block.location}${block.scripts}`);
         }
-        element.classList.add('is-Loaded');
-        return true;
+        // If this block type has scripts and they're already imported
+        if (block.module) {
+            block.module.default(element);
+        }
     };
 
     /**
@@ -151,12 +147,14 @@ function loadBlocks(blocks) {
     async function loadElement(element) {
         const { blockSelect } = element.dataset;
         const block = config.blocks[blockSelect];
-
+        initJs(element, block);
         if (!block.loaded && block.styles) {
-            loadStyle(`${block.location}${block.styles}`);
+            loadStyle(`${block.location}${block.styles}`, () => {
+                block.loaded = true;
+            });
+        } else {
+            block.loaded = true;
         }
-
-        block.loaded = initJs(element, block);
     };
 
     /**
