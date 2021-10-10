@@ -33,14 +33,10 @@ const config = {
     },
 };
 
-function getDomain() {
-    const domain = `${protocol}//${hostname}`;
-    return port ? `${domain}:${port}` : domain;
-}
-
 export function setDomain(element) {
     const anchors = element.getElementsByTagName('a');
-    const currentDomain = getDomain();
+    const domain = `${protocol}//${hostname}`;
+    const currentDomain = port ? `${domain}:${port}` : domain;
     Array.from(anchors).forEach((anchor) => {
         const { href } = anchor;
         if (href.includes(LIVE_DOMAIN)) {
@@ -194,7 +190,6 @@ function loadBlocks(blocks) {
         fragmentEl.querySelector('div').remove();
         fragmentEl.classList.add('is-Visible');
         setDomain(fragmentEl);
-        init(fragmentEl);
     };
 
     /**
@@ -239,4 +234,4 @@ function setLCPTrigger(blocks) {
 setDomain(document);
 loadTemplate(config);
 const blocks = decorateBlocks(document);
-setLCPTrigger(blocks);
+// setLCPTrigger(blocks);
