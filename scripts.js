@@ -215,7 +215,9 @@ function loadBlocks(blocks) {
     });
 }
 
-function postLCP() {};
+function postLCP() {
+    loadStyle('/fonts/fonts.css');
+};
 
 function setLCPTrigger() {
     const lcpCandidate = document.querySelector('img');
@@ -233,3 +235,8 @@ loadTemplate(config);
 const blocks = decorateBlocks(document);
 loadBlocks(blocks);
 setLCPTrigger();
+
+document.fonts.ready.then(() => {
+    console.log('fonts ready');
+    document.body.classList.add('with-Fonts');
+});
