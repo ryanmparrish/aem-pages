@@ -234,3 +234,7 @@ loadTemplate(config);
 const blocks = decorateBlocks(document);
 loadBlocks(blocks);
 setLCPTrigger();
+
+document.fonts.ready.then(function() {
+    document.body.classList.add('is-Loaded');
+});
