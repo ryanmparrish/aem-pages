@@ -26,26 +26,19 @@
 :root {
     /* Typography */
     --type-detail-all-weight: 700;
-
     --type-detail-m-size: 12px;
     --type-detail-m-lh: 15px;
     --type-detail-m-transform: uppercase;
-
     --type-heading-all-weight: 700;
-
     --type-heading-xxl-size: 44px;
     --type-heading-xxl-lh: 55px;
-    
-    --type-heading-xl-size: 36px;
+    --type-heading-xl-size: 2.25em;
     --type-heading-xl-lh: 45px;
-
     --type-heading-l-size: 28px;
     --type-heading-l-lh: 35px;
-
     --type-heading-m-size: 24px;
     --type-heading-m-lh: 30px;
-
-    --type-body-m-size: 18px;
+    --type-body-m-size: 1.125em;
     --type-body-m-lh: 27px;
 
     /* Spacing */
@@ -62,9 +55,9 @@
 }
 
 body {
-    opacity: 0;
-    transition: opacity 1s;
-    font-family: 'adobe-clean', 'Trebuchet MS', sans-serif;
+    font-family: 'Trebuchet MS', sans-serif;
+    letter-spacing: -0.03rem;
+    font-size: 15px;
     margin: 0;
     padding-top: 64px;
 }
@@ -72,6 +65,9 @@ body {
 body.is-Loaded {
     visibility: visible;
     opacity: 1;
+    font-family: 'adobe-clean', 'Trebuchet MS', sans-serif;
+    letter-spacing: 0rem;
+    font-size: 16px;
 }
 
 header {
