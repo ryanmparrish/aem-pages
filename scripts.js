@@ -218,6 +218,7 @@ function loadBlocks(blocks) {
 
 function postLCP(blocks) {
     loadBlocks(blocks);
+    document.body.classList.add('is-Loaded');
 };
 
 function setLCPTrigger(blocks) {
@@ -234,4 +235,4 @@ function setLCPTrigger(blocks) {
 setDomain(document);
 loadTemplate(config);
 const blocks = decorateBlocks(document);
-// setLCPTrigger(blocks);
+setLCPTrigger(blocks);
