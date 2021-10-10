@@ -146,7 +146,7 @@ function loadBlocks(blocks) {
         const { blockSelect } = element.dataset;
         const block = config.blocks[blockSelect];
         if (block.scripts) {
-            initJs(element, block);
+            await initJs(element, block);
         }
         if (block.styles) {
             loadStyle(`${block.location}${block.styles}`, () => {
