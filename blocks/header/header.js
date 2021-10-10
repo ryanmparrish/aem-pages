@@ -35,7 +35,6 @@ export function createEl({
 
 class Gnav {
   constructor(body, el) {
-    console.log(body, el);
     this.el = el;
     this.body = body;
     this.env = getEnv();

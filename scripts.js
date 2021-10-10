@@ -58,17 +58,17 @@ export function loadScript(url, callback, type) {
     return script;
 }
 
-export async function loadStyle(url, loadEvent) {
+export async function loadStyle(url, onLoad) {
     const duplicate = document.head.querySelector(`link[href^="${url}"]`);
     if (duplicate) {
-        if (loadEvent) { loadEvent(); }
+        if (onLoad) { onLoad(); }
         return;
     }
     const element = document.createElement('link');
     element.setAttribute('rel', 'stylesheet');
     element.setAttribute('href', url);
-    if (loadEvent) {
-        element.addEventListener('load', loadEvent);
+    if (onLoad) {
+        element.addEventListener('load', onLoad);
     }
     document.querySelector('head').appendChild(element);
 }
@@ -129,8 +129,6 @@ function decorateBlocks(element) {
 
 function loadBlocks(blocks) {
     async function initJs(element, block) {
-        // If the block scripts haven't been loaded, load them.
-        if (!block.scripts) return;
         if (!block.module) {
             block.module = await import(`${block.location}${block.scripts}`);
         }
@@ -147,8 +145,10 @@ function loadBlocks(blocks) {
     async function loadElement(element) {
         const { blockSelect } = element.dataset;
         const block = config.blocks[blockSelect];
-        initJs(element, block);
-        if (!block.loaded && block.styles) {
+        if (block.scripts) {
+            initJs(element, block);
+        }
+        if (block.styles) {
             loadStyle(`${block.location}${block.styles}`, () => {
                 block.loaded = true;
             });
@@ -215,8 +215,7 @@ function loadBlocks(blocks) {
 }
 
 function postLCP(blocks) {
-    loadStyle('/fonts/fonts.css');
-    document.body.classList.add('is-Loaded');
+    loadStyle('/fonts/fonts.css', () => { document.body.classList.add('is-Loaded'); });
 };
 
 function setLCPTrigger(blocks) {
