@@ -215,16 +215,16 @@ function loadBlocks(blocks) {
     });
 }
 
-function postLCP(blocks) {
-    loadBlocks(blocks);
+function postLCP() {
+    
 };
 
-function setLCPTrigger(blocks) {
+function setLCPTrigger() {
     const lcpCandidate = document.querySelector('img');
     if (lcpCandidate) {
-        if (lcpCandidate.complete) { postLCP(blocks); } else {
-            lcpCandidate.addEventListener('load', () => { postLCP(blocks) });
-            lcpCandidate.addEventListener('error', () => { postLCP(blocks) });
+        if (lcpCandidate.complete) { postLCP(); } else {
+            lcpCandidate.addEventListener('load', () => { postLCP() });
+            lcpCandidate.addEventListener('error', () => { postLCP() });
         }
     } else {
         postLCP(blocks);
@@ -233,4 +233,5 @@ function setLCPTrigger(blocks) {
 setDomain(document);
 loadTemplate(config);
 const blocks = decorateBlocks(document);
-setLCPTrigger(blocks);
+loadBlocks(blocks);
+setLCPTrigger();
