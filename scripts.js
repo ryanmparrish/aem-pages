@@ -151,11 +151,12 @@ function loadBlocks(blocks) {
         if (block.styles) {
             loadStyle(`${block.location}${block.styles}`, () => {
                 block.loaded = true;
+                element.classList.add('is-Loaded');
             });
         } else {
             block.loaded = true;
+            element.classList.add('is-Loaded');
         }
-        element.classList.add('is-Loaded');
     };
 
     /**
