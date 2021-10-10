@@ -216,6 +216,7 @@ function loadBlocks(blocks) {
 }
 
 function postLCP(blocks) {
+    loadStyle('/fonts/fonts.css');
     loadBlocks(blocks);
     document.body.classList.add('is-Loaded');
 };
