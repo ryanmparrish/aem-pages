@@ -1,4 +1,11 @@
 @font-face {
+    font-family: 'Trebuchet MS';
+    size-adjust: 90%;
+    src: local('Trebuchet MS'),
+         local('TrebuchetMS');;
+}
+
+@font-face {
     font-family:"adobe-clean";
     src:url("/fonts/adobe-clean-400.woff2") format("woff2");
     font-display:swap;font-style:normal;font-weight:400;
@@ -55,13 +62,8 @@
 
 body {
     font-family: 'adobe-clean', 'Trebuchet MS', sans-serif;
-    font-size: 14px;
     margin: 0;
     padding-top: 64px;
-}
-
-body.with-Fonts {
-    font-size: 16px;
 }
 
 [data-block-select] {
