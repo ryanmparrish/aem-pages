@@ -11,6 +11,10 @@ const config = {
             location: '/blocks/marquee/',
             scripts: 'marquee.js',
         },
+        '.feature-list': {
+            location: '/blocks/feature-list/',
+            styles: 'feature-list.css',
+        },
         'a[href^="https://www.youtube.com"]': {
             lazy: true,
             location: '/blocks/embed/',
