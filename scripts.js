@@ -1,5 +1,4 @@
 const LIVE_DOMAIN = 'https://www.hlx.live';
-const { protocol, hostname, port, pathname } = window.location;
 
 const config = {
     blocks: {
@@ -32,17 +31,42 @@ const config = {
     },
 };
 
-export function setDomain(element) {
-    const anchors = element.getElementsByTagName('a');
+function getCurrentDomain() {
+    const { protocol, hostname, port } = window.location;
     const domain = `${protocol}//${hostname}`;
-    const currentDomain = port ? `${domain}:${port}` : domain;
-    Array.from(anchors).forEach((anchor) => {
-        const { href } = anchor;
-        if (href.includes(LIVE_DOMAIN)) {
-            anchor.href = href.replace(LIVE_DOMAIN, currentDomain);
-        }
-    });
+    return port ? `${domain}:${port}` : domain;
+}
+
+function setDomain(anchor, currentDomain) {
+    const { href, textContent } = anchor;
+    if (!href.includes(LIVE_DOMAIN)) return href;
+    anchor.href = href.replace(LIVE_DOMAIN, currentDomain);
+    anchor.textContent = textContent.replace(LIVE_DOMAIN, currentDomain);
 };
+
+function setSVG(anchor) {
+    const { href, textContent } = anchor;
+    const ext = textContent.substr(textContent.lastIndexOf('.') + 1);
+    if (ext !== 'svg') return;
+    const img = document.createElement('img');
+    img.src = textContent;
+    if (textContent === href ) {
+        anchor.parentElement.append(img);
+        anchor.remove();
+    } else {
+        anchor.textContent = '';
+        anchor.append(img);
+    }
+}
+
+export function decorateAnchors(element) {
+    const anchors = element.getElementsByTagName('a');
+    const currentDomain = getCurrentDomain();
+    Array.from(anchors).forEach((anchor) => {
+        setDomain(anchor, currentDomain);
+        setSVG(anchor);
+    });
+}
 
 export function getMetadata(name) {
     const meta = document.head.querySelector(`meta[name="${name}"]`);
@@ -229,7 +253,7 @@ function setLCPTrigger() {
         postLCP(blocks);
     }
 }
-setDomain(document);
+decorateAnchors(document);
 loadTemplate(config);
 const blocks = decorateBlocks(document);
 loadBlocks(blocks);

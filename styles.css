@@ -2,7 +2,7 @@
     font-family: 'Trebuchet MS';
     size-adjust: 90%;
     src: local('Trebuchet MS'),
-         local('TrebuchetMS');;
+         local('TrebuchetMS');
 }
 
 @font-face {
@@ -124,9 +124,33 @@ h2 {
     line-height: 1.3;
 }
 
+/* Heading M */
+h3 {
+    font-size: var(--type-heading-m-size);
+    line-height: var(--type-heading-m-lh);
+}
+
 /* Themes */
 .dark {
     color: white;
+}
+
+/* Columns */
+.columns.three.contained > div {
+    max-width: 83.4%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 120px;
+    text-align: center;
+}
+
+.columns.three.contained > div > div > p:first-of-type {
+    margin: 0;
+}
+
+.columns.three.contained img {
+    max-width: 200px;
 }
 
 /* Button */
@@ -251,6 +275,11 @@ a.over-background {
 }
 
 @media screen and (min-width: 1440px) {
+    .columns.three.contained > div {
+        max-width: var(--grid-desktop-container-width);
+        padding: 80px 0;
+    }
+
     .marquee .container {
         max-width: var(--grid-desktop-container-width);
     }
