@@ -128,7 +128,7 @@ export function cleanVariations(parent) {
         const classNames = classNameClipped.split('--');
         variant.classList.add(...classNames);
     });
-};
+}
 
 function loadTemplate(config) {
     const template = getMetadata('template');
