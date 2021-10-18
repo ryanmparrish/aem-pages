@@ -87,6 +87,10 @@ header {
     z-index: 2;
 }
 
+img {
+    max-width: 100%;
+}
+
 /* Typography */
 h1,
 h2,

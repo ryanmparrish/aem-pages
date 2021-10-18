@@ -15,6 +15,11 @@ const config = {
             location: '/blocks/feature-list/',
             styles: 'feature-list.css',
         },
+        '.z-pattern': {
+            location: '/blocks/z-pattern/',
+            styles: 'z-pattern.css',
+            scripts: 'z-pattern.js',
+        },
         'a[href^="https://www.youtube.com"]': {
             lazy: true,
             location: '/blocks/embed/',
