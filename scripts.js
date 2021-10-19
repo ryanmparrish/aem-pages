@@ -15,6 +15,10 @@ const config = {
             location: '/blocks/feature-list/',
             styles: 'feature-list.css',
         },
+        '.get-started': {
+            location: '/blocks/get-started/',
+            styles: 'get-started.css',
+        },
         '.z-pattern': {
             location: '/blocks/z-pattern/',
             styles: 'z-pattern.css',
