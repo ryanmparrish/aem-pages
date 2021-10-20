@@ -1,5 +1,13 @@
 import mock from '../__mocks__/kitchen-sink.html';
-import { decorateAnchors, cleanVariations } from '../scripts';
+import {
+    decorateAnchors,
+    cleanVariations,
+    decorateBlocks,
+    loadScript,
+    loadStyle,
+    debug,
+    loadTemplate,
+} from '../scripts';
 
 document.body.insertAdjacentHTML('afterbegin', mock);
 
@@ -28,8 +36,70 @@ describe('url transformation', () => {
 
 describe('block decoration', () => {
     const parent = document.querySelector('.variations');
-    const variations = cleanVariations(parent);
+    const blocks = decorateBlocks(parent);
     test('variations are cleaned up', () => {
-        expect(variations[0].classList.contains('marquee')).toBeTruthy();
+        expect(blocks[0].classList.contains('marquee')).toBeTruthy();
+    });
+});
+
+describe('load scripts', () => {
+    test('variations are cleaned up', () => {
+        const scriptEl = loadScript('/awesome-thing.js');
+        expect(scriptEl).toBeTruthy();
+    });
+
+    test('variations are cleaned up', () => {
+        const scriptEl = loadScript('/awesome-module.js', null, 'module');
+        expect(scriptEl.type).toBe('module');
+    });
+});
+
+describe('load styles', () => {
+    function styleLoaded() {
+        window.styleLoaded = true;
+    }
+
+    test('load a style', async () => {
+        const styleEl = await loadStyle('/awesome-thing.css', styleLoaded);
+        expect(styleEl).toBeTruthy();
+    });
+
+    test('load duplicate style', async () => {
+        const styleEl = await loadStyle('/awesome-thing.css', styleLoaded);
+        expect(styleEl).toBeTruthy();
+        expect(window.styleLoaded).toBeTruthy();
+    });
+});
+
+describe('load templates', () => {
+    test('there is no template', async () => {
+        const template = loadTemplate({});
+        expect(template).toBeFalsy();
+    });
+
+    test('there is a template', async () => {
+        const meta = document.createElement('meta');
+        meta.setAttribute('name', 'template');
+        meta.setAttribute('content', 'tutorial');
+        document.head.append(meta);
+        const config = {
+            templates: {
+            'tutorial': {
+                location: '/templates/tutorial/',
+                styles: 'tutorial.css',
+                class: 'tutorial'
+            }
+        },
+        };
+        loadTemplate(config);
+        const { classList } = document.body;
+        expect(classList.contains('has-Template')).toBeTruthy();
+    });
+});
+
+describe('debug', () => {
+    test('debug on localhost', async () => {
+        const message = debug('return to sender');
+        expect(message).toBe('return to sender');
     });
 });

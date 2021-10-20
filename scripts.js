@@ -100,7 +100,7 @@ export async function loadStyle(url, onLoad) {
     const duplicate = document.head.querySelector(`link[href^="${url}"]`);
     if (duplicate) {
         if (onLoad) { onLoad(); }
-        return;
+        return duplicate;
     }
     const element = document.createElement('link');
     element.setAttribute('rel', 'stylesheet');
@@ -109,6 +109,7 @@ export async function loadStyle(url, onLoad) {
         element.addEventListener('load', onLoad);
     }
     document.querySelector('head').appendChild(element);
+    return element;
 }
 
 export function debug(message) {
@@ -116,7 +117,9 @@ export function debug(message) {
     const usp = new URLSearchParams(window.location.search);
     if (usp.has('helix-debug') || hostname === 'localhost') {
       console.log(message);
+      return message;
     }
+    return;
 }
 
 /**
@@ -136,22 +139,22 @@ export function cleanVariations(parent) {
     });
 }
 
-function loadTemplate(config) {
+export function loadTemplate(config) {
+    if (!config.templates) return;
     const template = getMetadata('template');
-    if (!template || config.templates) return;
-    document.body.classList.add('has-Template');
+    if (!template) return;
     const templateConf = config.templates[template];
-    if (templateConf?.class) {
+    if (!templateConf) return;
+    document.body.classList.add('has-Template');
+    if (templateConf.class) {
         document.body.classList.add(templateConf.class);
     }
     if (templateConf.styles) {
-        loadStyle(`${templateConf.location}${templateConf.styles}`, isLoaded);
-    } else {
-        isLoaded();
+        loadStyle(`${templateConf.location}${templateConf.styles}`);
     }
 }
 
-function decorateBlocks(element) {
+export function decorateBlocks(element) {
     const isDoc = element instanceof Document;
     const parent = isDoc ? document.body : element;
     cleanVariations(parent);
