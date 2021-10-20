@@ -4,7 +4,8 @@
   "description": "",
   "main": "scripts.js",
   "scripts": {
-    "test": "jest --coverage"
+    "test": "wtr \"./**/__tests__/*.test.js\" --node-resolve --coverage",
+    "test:watch": "wtr \"./**/__tests__/*.test.js\" --node-resolve --puppeteer --watch"
   },
   "repository": {
     "type": "git",
@@ -17,8 +18,9 @@
   },
   "homepage": "https://github.com/auniverseaway/aem-pages#readme",
   "devDependencies": {
-    "@babel/preset-env": "^7.15.8",
-    "jest": "^27.3.1",
-    "jest-raw-loader": "^1.0.1"
+    "@esm-bundle/chai": "^4.3.4-fix.0",
+    "@web/test-runner": "^0.13.20",
+    "@web/test-runner-commands": "^0.5.13",
+    "@web/test-runner-puppeteer": "^0.10.2"
   }
 }
