@@ -1,0 +1,26 @@
+{
+  "name": "aem-pages",
+  "version": "1.0.0",
+  "description": "",
+  "main": "scripts.js",
+  "scripts": {
+    "test": "jest --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/auniverseaway/aem-pages.git"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/auniverseaway/aem-pages/issues"
+  },
+  "homepage": "https://github.com/auniverseaway/aem-pages#readme",
+  "devDependencies": {
+    "@babel/preset-env": "^7.15.8",
+    "html-loader": "^2.1.2",
+    "jest": "^27.3.1",
+    "jest-raw-loader": "^1.0.1",
+    "regenerator-runtime": "^0.13.9"
+  }
+}

@@ -1,4 +1,4 @@
-import { createEl, fetchBlogArticleIndex, createOptimizedPicture } from '../../scripts/scripts.js';
+import { createEl, fetchBlogArticleIndex, createOptimizedPicture } from '../../scripts.js';
 
 function decorateCard(hit) {
   const {

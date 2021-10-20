@@ -44,20 +44,20 @@ const config = {
     },
 };
 
-function getCurrentDomain() {
+export function getCurrentDomain() {
     const { protocol, hostname, port } = window.location;
     const domain = `${protocol}//${hostname}`;
     return port ? `${domain}:${port}` : domain;
 }
 
-function setDomain(anchor, currentDomain) {
+export function setDomain(anchor, currentDomain) {
     const { href, textContent } = anchor;
     if (!href.includes(LIVE_DOMAIN)) return href;
     anchor.href = href.replace(LIVE_DOMAIN, currentDomain);
     anchor.textContent = textContent.replace(LIVE_DOMAIN, currentDomain);
 };
 
-function setSVG(anchor) {
+export function setSVG(anchor) {
     const { href, textContent } = anchor;
     const ext = textContent.substr(textContent.lastIndexOf('.') + 1);
     if (ext !== 'svg') return;
@@ -75,9 +75,10 @@ function setSVG(anchor) {
 export function decorateAnchors(element) {
     const anchors = element.getElementsByTagName('a');
     const currentDomain = getCurrentDomain();
-    Array.from(anchors).forEach((anchor) => {
+    return Array.from(anchors).map((anchor) => {
         setDomain(anchor, currentDomain);
         setSVG(anchor);
+        return anchor;
     });
 }
 
