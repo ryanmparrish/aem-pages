@@ -117,7 +117,7 @@ export async function loadStyle(url, onLoad) {
  * Ex: marquee--small--contained- -> marquee small contained
  * @param {HTMLElement} parent
  */
-function cleanVariations(parent) {
+export function cleanVariations(parent) {
     const variantBlocks = parent.querySelectorAll('[class$="-"]');
     return Array.from(variantBlocks).map((variant) => {
         const { className } = variant;
@@ -149,7 +149,7 @@ export function decorateBlocks(element) {
     const parent = isDoc ? document.body : element;
     cleanVariations(parent);
 
-    return Object.keys(config.blocks).reduce((decoratedBlocks, block) => {
+    const bls = Object.keys(config.blocks).reduce((decoratedBlocks, block) => {
         const elements = parent.querySelectorAll(block);
         elements.forEach((el) => {
             el.setAttribute('data-block-select', block);
@@ -157,6 +157,7 @@ export function decorateBlocks(element) {
         });
         return decoratedBlocks;
     }, []);
+    return bls;
 }
 
 async function initJs(element, block) {
@@ -170,10 +171,10 @@ async function initJs(element, block) {
 };
 
 /**
-     * Load each element
-     * @param {HTMLElement} element
-     */
-async function loadElement(element) {
+ * Load each element
+ * @param {HTMLElement} element
+ */
+export async function loadElement(element, config) {
     const { blockSelect } = element.dataset;
     const block = config.blocks[blockSelect];
     if (block.scripts) {
@@ -190,7 +191,7 @@ async function loadElement(element) {
     }
 };
 
-function loadBlocks(blocks) {
+function loadBlocks(blocks, config) {
     /**
      * Iterate through all entries to determine if they are intersecting.
      * @param {IntersectionObserverEntry} entries
@@ -200,7 +201,7 @@ function loadBlocks(blocks) {
         entries.forEach((entry) => {
             if (entry.isIntersecting) {
                 observer.unobserve(entry.target);
-                loadElement(entry.target);
+                loadElement(entry.target, config);
             }
         });
     };
@@ -242,7 +243,7 @@ function loadBlocks(blocks) {
         if (blockConf) {
             observer.observe(block);
         } else {
-            loadElement(block);
+            loadElement(block, config);
         }
     });
 }
@@ -264,5 +265,5 @@ function setLCPTrigger() {
 decorateAnchors(document);
 loadTemplate(config);
 const blocks = decorateBlocks(document);
-loadBlocks(blocks);
+loadBlocks(blocks, config);
 setLCPTrigger();

@@ -3,8 +3,10 @@ import { expect } from '@esm-bundle/chai';
 import {
     decorateAnchors,
     decorateBlocks,
+    loadElement,
     loadScript,
     loadStyle,
+    loadTemplate,
 } from '../scripts.js';
 
 const mock = await readFile({ path: './scripts.mock.html' });
@@ -14,7 +16,7 @@ describe('Anchors', () => {
     const parent = document.querySelector('.anchors');
     const anchors = decorateAnchors(parent);
     it('url maps to localhost', () => {
-        expect(anchors[0].href).to.equal('http://localhost:2054/my-content');
+        expect(anchors[0].href).to.equal('http://localhost:2000/my-content');
     });
 
     it('url does not map to localhost', () => {
@@ -30,7 +32,7 @@ describe('Anchors', () => {
         const svgAnchor = anchors.pop();
         const svg = parent.querySelector(':scope > a > img');
         expect(svg).to.exist;
-        expect(svgAnchor.href).to.equal('http://localhost:2054/my-awesome-link');
+        expect(svgAnchor.href).to.equal('http://localhost:2000/my-awesome-link');
     });
 });
 
@@ -44,7 +46,7 @@ describe('Block variations', () => {
 
 describe('Script loading', async () => {
     function callback() { window.scriptCallback = true; };
-    const script = await loadScript('/__tests__/feature.mock.js', callback);
+    const script = await loadScript('/__tests__/block.mock.js', callback, 'module');
     it('script element exists', () => {
         expect(script).to.exist;
     });
@@ -59,7 +61,7 @@ describe('Script loading', async () => {
 describe('Style loading', async () => {
     function callback() { window.styleCallback = true; };
     function callbackTwo() { window.styleCallbackTwo = true; };
-    const style = await loadStyle('/__tests__/styles.mock.css', callback);
+    const style = await loadStyle('/__tests__/block.mock.css', callback);
     it('style element exists', () => {
         expect(style).to.exist;
     });
@@ -71,8 +73,73 @@ describe('Style loading', async () => {
     });
 
     it('only one style', async () => {
-        const style = await loadStyle('/__tests__/styles.mock.css', callbackTwo);
+        const style = await loadStyle('/__tests__/block.mock.css', callbackTwo);
         expect(style).to.exist;
         expect(window.styleCallbackTwo).to.be.true;
+    });
+});
+
+describe('Template loading', async () => {
+    const config = { templates: {
+        'tutorial': {
+            location: '/templates/tutorial/',
+            styles: 'tutorial.css',
+        }
+    }};
+
+    const meta = document.createElement('meta');
+    meta.setAttribute('name', 'template');
+    meta.setAttribute('content', 'product');
+    document.head.append(meta);
+
+    it('template doesnt exist', () => {
+        const noTemplate = loadTemplate({});
+        expect(noTemplate).to.not.exist;
+    });
+
+    it('template conf doesnt exist', () => {
+        const template = loadTemplate(config);
+        expect(template).to.not.exist;
+    });
+
+    it('template conf exists', () => {
+        meta.setAttribute('content', 'tutorial');
+        loadTemplate(config);
+        expect(document.body.classList.contains('has-Template')).to.be.true;
+    });
+
+    it('template has name', () => {
+        meta.setAttribute('content', 'tutorial');
+        config.templates.tutorial.class = 'tutorial-template';
+        loadTemplate(config);
+        expect(document.body.classList.contains('tutorial-template')).to.be.true;
+    });
+});
+
+describe('Block loading', async () => {
+    const marquee = document.querySelector('.marquee');
+    const config = {
+        blocks: {
+            '.marquee': {
+                location: '/blocks/marquee/',
+                scripts: 'marquee.js',
+            },
+        },
+    };
+
+    it('block has a block select', () => {
+        const { blockSelect } = marquee.dataset;
+        expect(blockSelect).to.exist;
+    });
+
+    it('block is loaded with only js', async () => {
+        await loadElement(marquee, config);
+        expect(marquee.classList.contains('is-Loaded')).to.be.true;
+    });
+
+    it('block is loaded with css', async () => {
+        config.blocks['.marquee'].styles = 'marquee.css';
+        await loadElement(marquee, config);
+        expect(marquee.classList.contains('is-Loaded')).to.be.true;
     });
 });

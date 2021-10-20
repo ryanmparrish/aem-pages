@@ -1,4 +1,4 @@
-export function debug(message) {
+export default function debug(message) {
     const { hostname } = window.location;
     const usp = new URLSearchParams(window.location.search);
     if (usp.has('helix-debug') || hostname === 'localhost') {

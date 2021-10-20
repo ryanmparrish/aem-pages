@@ -1,4 +1,4 @@
-import { loadScript, debug, getMetadata, cleanVariations, decorateAnchors } from '../../scripts.js';
+import { loadScript, getMetadata, cleanVariations, decorateAnchors } from '../../scripts.js';
 import { getEnv } from '../../utils/env.js';
 
 const BRAND_IMG = '<img loading="lazy" alt="Adobe" src="/blocks/header/adobe-logo.svg">';
@@ -379,6 +379,7 @@ export default async function init(blockEl) {
       const gnav = new Gnav(doc.body, blockEl);
       gnav.init();
     } catch (e) {
+      const debug = await import('../../utils/debug.js');
       debug('Could not great global navigation', e);
     }
   }

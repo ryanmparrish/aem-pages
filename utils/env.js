@@ -1,4 +1,4 @@
-import { debug } from '../scripts.js';
+import debug from './debug.js';
 
 function setHelixEnv(name) {
     if (name) {
