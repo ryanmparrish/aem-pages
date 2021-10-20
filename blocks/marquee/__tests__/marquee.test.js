@@ -2,7 +2,7 @@ import { readFile } from '@web/test-runner-commands';
 import { expect } from '@esm-bundle/chai';
 import init from '../marquee.js';
 
-const mock = await readFile({ path: '../__mocks__/marquee.html' });
+const mock = await readFile({ path: './marquee.mock.html' });
 document.body.innerHTML = mock;
 
 describe('Marquee', () => {
