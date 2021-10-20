@@ -14,7 +14,7 @@ describe('Anchors', () => {
     const parent = document.querySelector('.anchors');
     const anchors = decorateAnchors(parent);
     it('url maps to localhost', () => {
-        expect(anchors[0].href).to.equal('http://localhost:8001/my-content');
+        expect(anchors[0].href).to.equal('http://localhost:2054/my-content');
     });
 
     it('url does not map to localhost', () => {
@@ -30,7 +30,7 @@ describe('Anchors', () => {
         const svgAnchor = anchors.pop();
         const svg = parent.querySelector(':scope > a > img');
         expect(svg).to.exist;
-        expect(svgAnchor.href).to.equal('http://localhost:8001/my-awesome-link');
+        expect(svgAnchor.href).to.equal('http://localhost:2054/my-awesome-link');
     });
 });
 

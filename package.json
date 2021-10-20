@@ -4,8 +4,8 @@
   "description": "",
   "main": "scripts.js",
   "scripts": {
-    "test": "wtr \"./**/__tests__/*.test.js\" --node-resolve --coverage",
-    "test:watch": "wtr \"./**/__tests__/*.test.js\" --node-resolve --watch"
+    "test": "wtr \"./**/__tests__/*.test.js\" --node-resolve --port=2054 --coverage",
+    "test:watch": "wtr \"./**/__tests__/*.test.js\" --node-resolve --port=2054 --watch"
   },
   "repository": {
     "type": "git",
