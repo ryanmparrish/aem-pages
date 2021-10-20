@@ -1,5 +1,5 @@
 import mock from '../__mocks__/kitchen-sink.html';
-import { decorateAnchors } from '../scripts';
+import { decorateAnchors, cleanVariations } from '../scripts';
 
 document.body.insertAdjacentHTML('afterbegin', mock);
 
@@ -23,5 +23,13 @@ describe('url transformation', () => {
         const svg = parent.querySelector(':scope > a > img');
         expect(svg).toBeDefined();
         expect(svgAnchor.href).toBe('http://localhost/my-awesome-link');
+    });
+});
+
+describe('block decoration', () => {
+    const parent = document.querySelector('.variations');
+    const variations = cleanVariations(parent);
+    test('variations are cleaned up', () => {
+        expect(variations[0].classList.contains('marquee')).toBeTruthy();
     });
 });

@@ -126,12 +126,13 @@ export function debug(message) {
  */
 export function cleanVariations(parent) {
     const variantBlocks = parent.querySelectorAll('[class$="-"]');
-    variantBlocks.forEach((variant) => {
+    return Array.from(variantBlocks).map((variant) => {
         const { className } = variant;
         const classNameClipped = className.slice(0, -1);
         variant.classList.remove(className);
         const classNames = classNameClipped.split('--');
         variant.classList.add(...classNames);
+        return variant;
     });
 }
 
