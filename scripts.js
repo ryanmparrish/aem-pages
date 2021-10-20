@@ -112,22 +112,12 @@ export async function loadStyle(url, onLoad) {
     return element;
 }
 
-export function debug(message) {
-    const { hostname } = window.location;
-    const usp = new URLSearchParams(window.location.search);
-    if (usp.has('helix-debug') || hostname === 'localhost') {
-      console.log(message);
-      return message;
-    }
-    return;
-}
-
 /**
  * Clean up variant classes
  * Ex: marquee--small--contained- -> marquee small contained
  * @param {HTMLElement} parent
  */
-export function cleanVariations(parent) {
+function cleanVariations(parent) {
     const variantBlocks = parent.querySelectorAll('[class$="-"]');
     return Array.from(variantBlocks).map((variant) => {
         const { className } = variant;
@@ -169,38 +159,38 @@ export function decorateBlocks(element) {
     }, []);
 }
 
-function loadBlocks(blocks) {
-    async function initJs(element, block) {
-        if (!block.module) {
-            block.module = await import(`${block.location}${block.scripts}`);
-        }
-        // If this block type has scripts and they're already imported
-        if (block.module) {
-            block.module.default(element);
-        }
-    };
+async function initJs(element, block) {
+    if (!block.module) {
+        block.module = await import(`${block.location}${block.scripts}`);
+    }
+    // If this block type has scripts and they're already imported
+    if (block.module) {
+        block.module.default(element);
+    }
+};
 
-    /**
+/**
      * Load each element
      * @param {HTMLElement} element
      */
-    async function loadElement(element) {
-        const { blockSelect } = element.dataset;
-        const block = config.blocks[blockSelect];
-        if (block.scripts) {
-            await initJs(element, block);
-        }
-        if (block.styles) {
-            loadStyle(`${block.location}${block.styles}`, () => {
-                block.loaded = true;
-                element.classList.add('is-Loaded');
-            });
-        } else {
+async function loadElement(element) {
+    const { blockSelect } = element.dataset;
+    const block = config.blocks[blockSelect];
+    if (block.scripts) {
+        await initJs(element, block);
+    }
+    if (block.styles) {
+        loadStyle(`${block.location}${block.styles}`, () => {
             block.loaded = true;
             element.classList.add('is-Loaded');
-        }
-    };
+        });
+    } else {
+        block.loaded = true;
+        element.classList.add('is-Loaded');
+    }
+};
 
+function loadBlocks(blocks) {
     /**
      * Iterate through all entries to determine if they are intersecting.
      * @param {IntersectionObserverEntry} entries
