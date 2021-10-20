@@ -18,9 +18,7 @@
   "homepage": "https://github.com/auniverseaway/aem-pages#readme",
   "devDependencies": {
     "@babel/preset-env": "^7.15.8",
-    "html-loader": "^2.1.2",
     "jest": "^27.3.1",
-    "jest-raw-loader": "^1.0.1",
-    "regenerator-runtime": "^0.13.9"
+    "jest-raw-loader": "^1.0.1"
   }
 }
