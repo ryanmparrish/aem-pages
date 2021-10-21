@@ -155,7 +155,7 @@ describe('Post LCP', () => {
     });
 
     it('LCP loads when there is a bad image', async () => {
-        img.src = '/__tests__/bl.mock.png';
+        img.src = '/__tests__/nope.mock.png';
         setLCPTrigger(img);
         const lcpError = await getObjectProperty('lcpError', ms);
         expect(lcpError).to.be.true;
@@ -168,18 +168,32 @@ describe('Post LCP', () => {
     });
 });
 
+const getLazyElement = (selector, timeout) => new Promise((resolve) => {
+    let i = 0;
+    const interval = 10;
+    const refreshId = setInterval(() => {
+        const el = document.querySelector(selector);
+        if (el !== null && typeof el !== 'undefined') {
+            resolve(el);
+            clearInterval(refreshId);
+        } else if (i >= timeout) {
+            resolve(null);
+            clearInterval(refreshId);
+        }
+        i += interval;
+    }, interval);
+});
+
 describe('Lazy loading', async () => {
     it('youtube is loaded', async () => {
         const blocks = decorateBlocks(document);
         await loadBlocks(blocks, config);
-        setTimeout(() => {
-            const wrapper = document.querySelector('.youtube-wrapper');
-            expect(wrapper).to.exist;
-        }, 10);
+        const iframe = await getLazyElement('iframe', ms);
+        expect(iframe).to.exist;
     });
 });
 
 describe('Object property', async () => {
-    const loaded = await getObjectProperty('nope', 1);
+    const loaded = await getObjectProperty('nope', ms);
     expect(loaded).to.be.null;
 });

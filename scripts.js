@@ -205,6 +205,7 @@ export async function loadBlocks(blocks, config) {
     const onIntersection = (entries, observer) => {
         entries.forEach((entry) => {
             if (entry.isIntersecting) {
+                console.log('intersecting');
                 const { blockSelect } = entry.target.dataset;
                 const blockConf = config.blocks[blockSelect];
                 observer.unobserve(entry.target);

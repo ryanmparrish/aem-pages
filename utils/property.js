@@ -8,7 +8,6 @@ const getObjectProperty = (property, timeout) => new Promise((resolve) => {
     const interval = 10;
     const refreshId = setInterval(() => {
         const prop = getProperty(window, property);
-        // Use not null in case 'false' is the prop.
         if (prop !== null && typeof prop !== 'undefined') {
             resolve(prop);
             clearInterval(refreshId);
