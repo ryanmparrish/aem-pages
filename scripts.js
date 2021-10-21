@@ -48,8 +48,8 @@ export const config = {
     },
 };
 
-export function getCurrentDomain() {
-    const { protocol, hostname, port } = window.location;
+export function getCurrentDomain(location) {
+    const { protocol, hostname, port } = location || window.location;
     const domain = `${protocol}//${hostname}`;
     return port ? `${domain}:${port}` : domain;
 }
@@ -226,19 +226,20 @@ export async function loadBlocks(blocks, config) {
     }));
 }
 
-function postLCP() { window.postLcp = true; }
+function postLCP(type) { window[type] = true; }
 
-export function setLCPTrigger(selector) {
-    const lcp = document.querySelector(selector);
+export function setLCPTrigger(lcp) {
     if (lcp) {
-        if (lcp.complete) { postLCP(); return; }
-        lcp.addEventListener('load', postLCP);
+        if (lcp.complete) { postLCP('lcpComplete'); return; }
+        lcp.addEventListener('load', () => { postLCP('lcpLoad'); });
+        lcp.addEventListener('error', () => { postLCP('lcpError'); });
         return;
     }
-    postLCP();
+    postLCP('noLcp');
 }
 decorateAnchors(document);
 loadTemplate(config);
 const blocks = decorateBlocks(document);
 loadBlocks(blocks, config);
-setLCPTrigger('img');
+const lcp = document.querySelector('img');
+setLCPTrigger(lcp);

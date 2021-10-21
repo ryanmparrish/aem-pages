@@ -11,7 +11,7 @@ async function fetchFragment(path) {
 export default async function init(element) {
     const path = element.querySelector('div > div').textContent;
     const html = await fetchFragment(path);
-    if (!html) return;
+    if (!html) return null;
     element.insertAdjacentHTML('beforeend', html);
     element.querySelector('div').remove();
     element.classList.add('is-Visible');

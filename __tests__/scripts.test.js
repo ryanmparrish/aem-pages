@@ -4,6 +4,7 @@ import {
     config,
     decorateAnchors,
     decorateBlocks,
+    getCurrentDomain,
     loadBlocks,
     loadElement,
     loadScript,
@@ -11,6 +12,8 @@ import {
     loadTemplate,
     setLCPTrigger,
 } from '../scripts.js';
+import getObjectProperty from '../utils/property.js';
+const ms = 100;
 
 const mock = await readFile({ path: './scripts.mock.html' });
 document.body.innerHTML = mock;
@@ -37,6 +40,12 @@ describe('Anchors', () => {
         expect(svg).to.exist;
         expect(svgAnchor.href).to.equal('http://localhost:2000/my-awesome-link');
     });
+
+    it('domain respects port', () =>{
+        const location = { protocol: 'http:', hostname: 'localhost' }
+        const currentDomain = getCurrentDomain(location);
+        expect(currentDomain).to.equal('http://localhost');
+    });
 });
 
 describe('Block variations', () => {
@@ -55,15 +64,13 @@ describe('Script loading', async () => {
     });
 
     it('script calls back', async () => {
-        setTimeout(() => {
-            expect(window.scriptCallback).to.be.true;
-        }, 10);
+        const loaded = await getObjectProperty('scriptCallback', ms);
+        expect(loaded).to.be.true;
     });
 
     it('block mock can run', async () => {
-        setTimeout(() => {
-            expect(window.feature.loaded).to.be.true;
-        }, 10);
+        const loaded = await getObjectProperty('feature.loaded', ms);
+        expect(loaded).to.be.true;
     });
 });
 
@@ -76,9 +83,8 @@ describe('Style loading', async () => {
     });
 
     it('style calls back', async () => {
-        setTimeout(() => {
-            expect(window.styleCallback).to.be.true;
-        }, 10);
+        const loaded = await getObjectProperty('styleCallback', ms);
+        expect(loaded).to.be.true;
     });
 
     it('only one style', async () => {
@@ -138,25 +144,42 @@ describe('Block loading', async () => {
     });
 });
 
-describe('Fragment loading', async () => {
-    it('fragment is loaded', async () => {
-        const blocks = decorateBlocks(document);
-        const loadedBlocks = await loadBlocks(blocks, config);
-        setTimeout(() => {
-            const heading = document.querySelector('.fragment h1');
-            expect(heading).to.exist;
-        }, 50);
+describe('Post LCP', () => {
+    const img = document.createElement('img');
+    document.body.append(img);
+
+    it('LCP loads when there is no image', () => {
+        const lcp = document.querySelector('img');
+        setLCPTrigger(lcp);
+        expect(window.lcpComplete).to.be.true;
+    });
+
+    it('LCP loads when there is a bad image', async () => {
+        img.src = '/__tests__/bl.mock.png';
+        setLCPTrigger(img);
+        const lcpError = await getObjectProperty('lcpError', ms);
+        expect(lcpError).to.be.true;
+    });
+
+    it('LCP loads when there is a good image', async () => {
+        img.src = '/__tests__/block.mock.png';
+        const lcpLoad = await getObjectProperty('lcpLoad', ms);
+        expect(lcpLoad).to.be.true;
     });
 });
 
-describe('Post LCP', async () => {
-    it('LCP loads when there is no image', async () => {
-        expect(window.postLcp).to.be.true;
-        window.postLcp = null;
+describe('Lazy loading', async () => {
+    it('youtube is loaded', async () => {
+        const blocks = decorateBlocks(document);
+        await loadBlocks(blocks, config);
+        setTimeout(() => {
+            const wrapper = document.querySelector('.youtube-wrapper');
+            expect(wrapper).to.exist;
+        }, 10);
     });
+});
 
-    it('LCP loads when there is an image', async () => {
-        setLCPTrigger('img');
-        expect(window.postLcp).to.be.true;
-    });
+describe('Object property', async () => {
+    const loaded = await getObjectProperty('nope', 1);
+    expect(loaded).to.be.null;
 });
