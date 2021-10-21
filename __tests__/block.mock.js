@@ -1,3 +1,4 @@
 export default function foo() {
-    window.foo = { loaded: true };
+    window.feature = { loaded: true };
 }
+foo();

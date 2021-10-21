@@ -1,6 +1,6 @@
 const LIVE_DOMAIN = 'https://www.hlx.live';
 
-const config = {
+export const config = {
     blocks: {
         'header': {
             location: '/blocks/header/',
@@ -23,6 +23,10 @@ const config = {
             location: '/blocks/z-pattern/',
             styles: 'z-pattern.css',
             scripts: 'z-pattern.js',
+        },
+        '.fragment': {
+            location: '/blocks/fragment/',
+            scripts: 'fragment.js',
         },
         'a[href^="https://www.youtube.com"]': {
             lazy: true,
@@ -174,24 +178,25 @@ async function initJs(element, block) {
  * Load each element
  * @param {HTMLElement} element
  */
-export async function loadElement(element, config) {
-    const { blockSelect } = element.dataset;
-    const block = config.blocks[blockSelect];
-    if (block.scripts) {
-        await initJs(element, block);
-    }
-    if (block.styles) {
-        loadStyle(`${block.location}${block.styles}`, () => {
-            block.loaded = true;
+export async function loadElement(element, blockConf) {
+    if (blockConf) {
+        if (blockConf.scripts) {
+            await initJs(element, blockConf);
+        }
+        if (blockConf.styles) {
+            loadStyle(`${blockConf.location}${blockConf.styles}`, () => {
+                blockConf.loaded = true;
+                element.classList.add('is-Loaded');
+            });
+        } else {
+            blockConf.loaded = true;
             element.classList.add('is-Loaded');
-        });
-    } else {
-        block.loaded = true;
-        element.classList.add('is-Loaded');
+        }
     }
+    return element;
 };
 
-function loadBlocks(blocks, config) {
+export async function loadBlocks(blocks, config) {
     /**
      * Iterate through all entries to determine if they are intersecting.
      * @param {IntersectionObserverEntry} entries
@@ -200,70 +205,40 @@ function loadBlocks(blocks, config) {
     const onIntersection = (entries, observer) => {
         entries.forEach((entry) => {
             if (entry.isIntersecting) {
+                const blockConf = config.blocks[blockSelect];
                 observer.unobserve(entry.target);
-                loadElement(entry.target, config);
+                loadElement(entry.target, blockConf);
             }
         });
     };
 
-    const fetchFragment = async (path) => {
-        const resp = await fetch(`${path}.plain.html`);
-        if (resp.ok) {
-            return resp.text();
-        }
-        return null;
-    };
-
-    const loadFragment = async (fragmentEl) => {
-        const path = fragmentEl.querySelector('div > div').textContent;
-        const html = await fetchFragment(path);
-        if (!html) return;
-        fragmentEl.insertAdjacentHTML('beforeend', html);
-        fragmentEl.querySelector('div').remove();
-        fragmentEl.classList.add('is-Visible');
-        setDomain(fragmentEl);
-    };
-
-    /**
-     * Add fragment to the list of blocks
-     */
-    config.blocks['.fragment'] = {
-        loaded: true,
-        scripts: {},
-        module: {
-            default: loadFragment,
-        },
-    };
-
     const options = { rootMargin: config.lazyMargin || '1200px 0px' };
     const observer = new IntersectionObserver(onIntersection, options);
-    blocks.forEach((block) => {
+    return await Promise.all(blocks.map(async (block) => {
         const { blockSelect } = block.dataset;
         const blockConf = config.blocks[blockSelect];
-        if (blockConf) {
+        if (blockConf?.lazy) {
             observer.observe(block);
         } else {
-            loadElement(block, config);
+            return await loadElement(block, blockConf);
         }
-    });
+    }));
 }
 
-function postLCP() {
-};
+function postLCP() { window.postLcp = true; }
 
-function setLCPTrigger() {
-    const lcpCandidate = document.querySelector('img');
-    if (lcpCandidate) {
-        if (lcpCandidate.complete) { postLCP(); } else {
-            lcpCandidate.addEventListener('load', () => { postLCP() });
-            lcpCandidate.addEventListener('error', () => { postLCP() });
-        }
-    } else {
-        postLCP(blocks);
+export function setLCPTrigger(selector) {
+    const lcp = document.querySelector(selector);
+    if (lcp) {
+        if (lcp.complete) { postLCP(); return; }
+        lcp.addEventListener('load', postLCP);
+        lcp.addEventListener('error', postLCP);
+        return;
     }
+    postLCP();
 }
 decorateAnchors(document);
 loadTemplate(config);
 const blocks = decorateBlocks(document);
 loadBlocks(blocks, config);
-setLCPTrigger();
+setLCPTrigger('img');

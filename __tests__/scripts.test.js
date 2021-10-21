@@ -1,12 +1,15 @@
 import { readFile } from '@web/test-runner-commands';
 import { expect } from '@esm-bundle/chai';
 import {
+    config,
     decorateAnchors,
     decorateBlocks,
+    loadBlocks,
     loadElement,
     loadScript,
     loadStyle,
     loadTemplate,
+    setLCPTrigger,
 } from '../scripts.js';
 
 const mock = await readFile({ path: './scripts.mock.html' });
@@ -54,6 +57,12 @@ describe('Script loading', async () => {
     it('script calls back', async () => {
         setTimeout(() => {
             expect(window.scriptCallback).to.be.true;
+        }, 10);
+    });
+
+    it('block mock can run', async () => {
+        setTimeout(() => {
+            expect(window.feature.loaded).to.be.true;
         }, 10);
     });
 });
@@ -118,14 +127,6 @@ describe('Template loading', async () => {
 
 describe('Block loading', async () => {
     const marquee = document.querySelector('.marquee');
-    const config = {
-        blocks: {
-            '.marquee': {
-                location: '/blocks/marquee/',
-                scripts: 'marquee.js',
-            },
-        },
-    };
 
     it('block has a block select', () => {
         const { blockSelect } = marquee.dataset;
@@ -133,13 +134,36 @@ describe('Block loading', async () => {
     });
 
     it('block is loaded with only js', async () => {
-        await loadElement(marquee, config);
+        await loadElement(marquee, config.blocks['.marquee']);
         expect(marquee.classList.contains('is-Loaded')).to.be.true;
     });
 
     it('block is loaded with css', async () => {
         config.blocks['.marquee'].styles = 'marquee.css';
-        await loadElement(marquee, config);
+        await loadElement(marquee, config.blocks['.marquee']);
         expect(marquee.classList.contains('is-Loaded')).to.be.true;
+    });
+});
+
+describe('Fragment loading', async () => {
+    it('fragment is loaded', async () => {
+        const blocks = decorateBlocks(document);
+        const loadedBlocks = await loadBlocks(blocks, config);
+        setTimeout(() => {
+            const heading = document.querySelector('.fragment h1');
+            expect(heading).to.exist;
+        }, 50);
+    });
+});
+
+describe('Post LCP', async () => {
+    it('LCP loads when there is no image', async () => {
+        expect(window.postLcp).to.be.true;
+        window.postLcp = null;
+    });
+
+    it('LCP loads when there is an image', async () => {
+        setLCPTrigger('img');
+        expect(window.postLcp).to.be.true;
     });
 });
