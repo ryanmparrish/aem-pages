@@ -89,13 +89,6 @@ describe('Style loading', async () => {
 });
 
 describe('Template loading', async () => {
-    const config = { templates: {
-        'tutorial': {
-            location: '/templates/tutorial/',
-            styles: 'tutorial.css',
-        }
-    }};
-
     const meta = document.createElement('meta');
     meta.setAttribute('name', 'template');
     meta.setAttribute('content', 'product');

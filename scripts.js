@@ -205,6 +205,7 @@ export async function loadBlocks(blocks, config) {
     const onIntersection = (entries, observer) => {
         entries.forEach((entry) => {
             if (entry.isIntersecting) {
+                const { blockSelect } = entry.target.dataset;
                 const blockConf = config.blocks[blockSelect];
                 observer.unobserve(entry.target);
                 loadElement(entry.target, blockConf);
@@ -232,7 +233,6 @@ export function setLCPTrigger(selector) {
     if (lcp) {
         if (lcp.complete) { postLCP(); return; }
         lcp.addEventListener('load', postLCP);
-        lcp.addEventListener('error', postLCP);
         return;
     }
     postLCP();
