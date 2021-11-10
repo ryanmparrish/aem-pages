@@ -2,6 +2,11 @@ const LIVE_DOMAIN = 'https://www.hlx.live';
 
 export const config = {
     blocks: {
+        '.cards': {
+            location: '/blocks/cards/',
+            scripts: 'cards.js',
+            styles: 'cards.css',
+        },
         'header': {
             location: '/blocks/header/',
             scripts: 'header.js',

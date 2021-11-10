@@ -1,0 +1,42 @@
+@import '../../dist/dexter/app.min.css';
+
+.cards {
+    position: relative;
+    padding: var(--spacing-l) 0 var(--spacing-l) 0;
+}
+
+.cards .background img {
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+}
+
+.cards .background {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.cards .container {
+    position: relative;
+    max-width: var(--grid-mobile-container-width);
+    margin: 0 auto;
+}
+
+@media screen and (min-width: 1200px) {
+    .cards .container {
+        min-height: 360px;
+        display: flex;
+        justify-content: space-between;
+        align-items: stretch;
+    }
+
+}
+
+@media screen and (min-width: 1440px) {
+    .cards .container {
+        max-width: var(--grid-desktop-container-width);
+    }
+}
