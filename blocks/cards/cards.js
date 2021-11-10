@@ -1,4 +1,4 @@
-import '../../dist/dexter/app.min.js';
+import '../../vend/dexter/app.min.js';
 
 let config = {
     collection: {
@@ -242,13 +242,13 @@ const init = (element) => {
         const bgColor = bg.textContent;
         element.style.background = bgColor;
     }
-    // const content = element.querySelector(':scope > div:last-of-type');
-    // content.classList.add('container');
-    // const endpoint = content.textContent;
-    // if(endpoint) {
-    //     config.collection.endpoint = endpoint;
-    //     console.log({endpoint});
-    // }
+    const content = element.querySelector(':scope > div:last-of-type');
+    content.classList.add('container');
+    const endpoint = content.textContent;
+    if(endpoint) {
+        config.collection.endpoint = endpoint;
+        console.log({endpoint});
+    }
 
     const consonantCardCollection = new ConsonantCardCollection(config, element);
 
